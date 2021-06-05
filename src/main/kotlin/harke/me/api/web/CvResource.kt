@@ -1,15 +1,19 @@
 package harke.me.api.web
 
 import harke.me.api.config.withRole
-import harke.me.api.model.NewCvEntry
 import harke.me.api.service.CvService
+import harke.me.api.web.model.CvBody
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import org.koin.ktor.ext.inject
 
-fun Route.cvRouting(cvService: CvService) {
+fun Route.cvRouting() {
+
+    val cvService by inject<CvService>()
+
     route("/cv") {
         get {
             call.respond(cvService.getAllEntries())
@@ -21,11 +25,11 @@ fun Route.cvRouting(cvService: CvService) {
         }
         withRole("admin") {
             post {
-                val cvEntry = call.receive<NewCvEntry>()
+                val cvEntry = call.receive<CvBody>()
                 call.respond(HttpStatusCode.Created, cvService.addEntry(cvEntry))
             }
             put {
-                val cvEntry = call.receive<NewCvEntry>()
+                val cvEntry = call.receive<CvBody>()
                 val updated = cvService.updateEntry(cvEntry)
                 call.respond(updated)
             }

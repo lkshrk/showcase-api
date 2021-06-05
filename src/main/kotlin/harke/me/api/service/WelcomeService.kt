@@ -1,24 +1,33 @@
 package harke.me.api.service
 
-import harke.me.api.model.WelcomeEntity
-import harke.me.api.model.WelcomeEntry
-import org.jetbrains.exposed.sql.transactions.transaction
+import harke.me.api.persistence.DatabaseProviderContract
+import harke.me.api.persistence.WelcomeEntity
+import harke.me.api.web.model.WelcomeBody
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class WelcomeService {
+class WelcomeServiceImpl: WelcomeService, KoinComponent {
 
-    fun getEntry(principal: String): WelcomeEntry = transaction {
+    private val dbProvider by inject<DatabaseProviderContract>()
+
+    override suspend fun getEntry(principal: String): WelcomeBody = dbProvider.dbQuery {
         WelcomeEntity[principal].toWelcomeEntry()
     }
 
-    fun addEntry(welcomeEntry: WelcomeEntry): WelcomeEntry = transaction {
+    override suspend fun addEntry(welcomeEntry: WelcomeBody): WelcomeBody = dbProvider.dbQuery {
         WelcomeEntity.new(welcomeEntry.id) {
             this.title = welcomeEntry.title
             this.coverLetter = welcomeEntry.coverLetter
         }.toWelcomeEntry()
     }
 
-    fun deleteEntry(id: String) {
+    override suspend fun deleteEntry(id: String) = dbProvider.dbQuery {
         WelcomeEntity[id].delete()
     }
+}
 
+interface WelcomeService {
+    suspend fun getEntry(principal: String): WelcomeBody
+    suspend fun addEntry(welcomeEntry: WelcomeBody): WelcomeBody
+    suspend fun deleteEntry(id: String)
 }

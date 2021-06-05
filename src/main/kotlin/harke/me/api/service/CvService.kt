@@ -1,24 +1,25 @@
 package harke.me.api.service
 
-import harke.me.api.model.CvEntry
-import harke.me.api.model.CvEntryEntity
-import harke.me.api.model.NewCvEntry
-import org.jetbrains.exposed.sql.transactions.transaction
+import harke.me.api.persistence.DatabaseProviderContract
+import harke.me.api.persistence.CvEntryEntity
+import harke.me.api.web.model.CvBody
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
+class CvServiceImpl: CvService, KoinComponent {
 
-class CvService {
+    private val dbProvider by inject<DatabaseProviderContract>()
 
-
-    fun getAllEntries(): Iterable<CvEntry> = transaction {
+    override suspend fun getAllEntries(): Iterable<CvBody> = dbProvider.dbQuery {
         CvEntryEntity.all().map(CvEntryEntity::toCvEntry)
     }
 
-    fun getEntry(id: Int): CvEntry = transaction {
+    override suspend fun getEntry(id: Int): CvBody = dbProvider.dbQuery {
         CvEntryEntity[id].toCvEntry()
     }
 
-    fun updateEntry(cvEntry: NewCvEntry) : CvEntry = transaction {
-        if (cvEntry.id != null) {
+    override suspend fun updateEntry(cvEntry: CvBody): CvBody {
+        return if (cvEntry.id != null) {
             val entry = CvEntryEntity[cvEntry.id]
             entry.title = cvEntry.title
             entry.content = cvEntry.content
@@ -31,7 +32,7 @@ class CvService {
         }
     }
 
-    fun addEntry(cvEntry: NewCvEntry): CvEntry = transaction {
+    override suspend fun addEntry(cvEntry: CvBody): CvBody = dbProvider.dbQuery {
         CvEntryEntity.new {
             this.title = cvEntry.title
             this.content = cvEntry.content
@@ -41,7 +42,15 @@ class CvService {
         }.toCvEntry()
     }
 
-    fun deleteEntry(id: Int) = transaction {
+    override suspend fun deleteEntry(id: Int) = dbProvider.dbQuery {
         CvEntryEntity[id].delete()
     }
+}
+
+interface CvService {
+    suspend fun getAllEntries(): Iterable<CvBody>
+    suspend fun getEntry(id: Int): CvBody
+    suspend fun updateEntry(cvEntry: CvBody) : CvBody
+    suspend fun addEntry(cvEntry: CvBody): CvBody
+    suspend fun deleteEntry(id: Int)
 }

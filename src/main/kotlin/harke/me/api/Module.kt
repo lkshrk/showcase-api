@@ -1,9 +1,7 @@
 package harke.me.api
 
-import com.sksamuel.hoplite.ConfigLoader
 import harke.me.api.config.*
-import harke.me.api.service.CvService
-import harke.me.api.service.WelcomeService
+import harke.me.api.persistence.DatabaseProviderContract
 import harke.me.api.web.cvRouting
 import harke.me.api.web.welcomeRouting
 import io.ktor.application.*
@@ -13,17 +11,17 @@ import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.serialization.*
-import io.ktor.server.engine.*
-import io.ktor.server.netty.*
-import io.ktor.util.*
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.dao.exceptions.EntityNotFoundException
+import org.koin.ktor.ext.inject
 
-fun main(args: Array<String>) { embeddedServer(Netty, commandLineEnvironment(args)).start(wait = true) }
+fun Application.module() {
 
-@KtorExperimentalAPI
-@Suppress("unsued") // referenced in Application.conf
-fun Application.module(testing: Boolean = false) {
+    val databaseProvider by inject<DatabaseProviderContract>()
+    val config by inject<AppConfig>()
+
+    databaseProvider.init()
+
     install(DefaultHeaders)
     install(ContentNegotiation) {
         json(Json{prettyPrint = true})
@@ -35,29 +33,21 @@ fun Application.module(testing: Boolean = false) {
         exception<AuthorizationException> {
             call.respond(HttpStatusCode.Unauthorized)
         }
+        exception<IllegalArgumentException> {
+            call.respond(HttpStatusCode.BadRequest)
+        }
     }
 
-    val configPath = environment.config.property("ktor.configPath").getString()
-    val config = ConfigLoader().loadConfigOrThrow<AppConfig>(configPath)
+    install(Authentication) {
+        authenticationConfig(config.auth)
+    }
 
-
-    configureAuth(config.auth)
     install(RoleBasedAuthorization)
 
-
-
-    // db init
-    DatabaseFactory.init(config.database)
-
-    // services & routes
-    val cvService = CvService()
-    val welcomeService = WelcomeService()
     install(Routing) {
         authenticate("auth-jwt") {
-            cvRouting(cvService)
-            welcomeRouting(welcomeService)
+            cvRouting()
+            welcomeRouting()
         }
     }
 }
-
-

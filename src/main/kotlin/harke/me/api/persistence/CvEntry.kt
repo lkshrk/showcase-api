@@ -1,13 +1,13 @@
-package harke.me.api.model
+package harke.me.api.persistence
 
-import kotlinx.serialization.Serializable
+import harke.me.api.web.model.CvBody
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
 
 
-object CvEntries : IntIdTable() {
+object CvEntries : IntIdTable("CV") {
     val title = CvEntries.varchar("title", 50)
     val content = CvEntries.varchar("content", 1000)
     val startYear = CvEntries.integer("startYear")
@@ -24,7 +24,7 @@ class CvEntryEntity(id: EntityID<Int>) : IntEntity(id) {
     var endYear by CvEntries.endYear
     var dateUpdated by CvEntries.dateUpdated
 
-    fun toCvEntry() = CvEntry(
+    fun toCvEntry() = CvBody(
         id.value,
         title,
         content,
@@ -33,8 +33,3 @@ class CvEntryEntity(id: EntityID<Int>) : IntEntity(id) {
     )
 }
 
-@Serializable
-data class CvEntry(val id: Int, val title: String, val content: String, val startYear: Int, val endYear: Int)
-
-@Serializable
-data class NewCvEntry(val id: Int? = null, val title: String, val content: String, val startYear: Int, val endYear: Int)

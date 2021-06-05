@@ -1,7 +1,10 @@
+server:
+  port: 8544
+
 database:
   driverClass: org.h2.Driver
   jdbcUrl: jdbc:h2:mem:test
 
 auth:
-    secret: verysecretkey
+    secret: very-secure
     issuer: showcase-auth
