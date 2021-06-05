@@ -1,0 +1,7 @@
+database:
+  driverClass: org.h2.Driver
+  jdbcUrl: jdbc:h2:mem:test
+
+auth:
+    secret: verysecretkey
+    issuer: showcase-auth

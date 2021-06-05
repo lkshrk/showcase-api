@@ -1,7 +1,7 @@
 package harke.me.api.service
 
-import harke.me.api.model.CvEntryEntity
 import harke.me.api.model.CvEntry
+import harke.me.api.model.CvEntryEntity
 import harke.me.api.model.NewCvEntry
 import org.jetbrains.exposed.sql.transactions.transaction
 

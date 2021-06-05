@@ -24,7 +24,7 @@ class RoleBasedAuthorization {
                 call.authentication.principal<JWTPrincipal>() ?: throw AuthorizationException("Missing principal")
             val principalRole = principal.payload.claims["role"]?.asString()
             if (principalRole != role) {
-                throw AuthorizationException("${principal.payload.subject} has not role $role")
+                throw AuthorizationException("${principal.payload.subject} has no role $role")
             }
         }
     }
@@ -51,8 +51,12 @@ class AuthorizedRouteSelector(private val description: String) :
 }
 
 fun Route.withRole(role: String, build: Route.() -> Unit): Route {
-    val authorizedRoute = createChild(AuthorizedRouteSelector(role))
-    application.feature(RoleBasedAuthorization).interceptPipeline(authorizedRoute, role)
+    val selector = AuthorizedRouteSelector("authorize ($role)")
+    val authorizedRoute = createChild(selector)
+
+    val feature = application.feature(RoleBasedAuthorization)
+    feature.interceptPipeline(authorizedRoute, role)
+
     authorizedRoute.build()
     return authorizedRoute
 }

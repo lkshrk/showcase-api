@@ -1,9 +1,7 @@
 package harke.me.api
 
-import harke.me.api.config.AuthorizationException
-import harke.me.api.config.DatabaseFactory
-import harke.me.api.config.RoleBasedAuthorization
-import harke.me.api.config.configureAuth
+import com.sksamuel.hoplite.ConfigLoader
+import harke.me.api.config.*
 import harke.me.api.service.CvService
 import harke.me.api.service.WelcomeService
 import harke.me.api.web.cvRouting
@@ -25,7 +23,7 @@ fun main(args: Array<String>) { embeddedServer(Netty, commandLineEnvironment(arg
 
 @KtorExperimentalAPI
 @Suppress("unsued") // referenced in Application.conf
-fun Application.module() {
+fun Application.module(testing: Boolean = false) {
     install(DefaultHeaders)
     install(ContentNegotiation) {
         json(Json{prettyPrint = true})
@@ -38,12 +36,18 @@ fun Application.module() {
             call.respond(HttpStatusCode.Unauthorized)
         }
     }
-    configureAuth()
+
+    val configPath = environment.config.property("ktor.configPath").getString()
+    val config = ConfigLoader().loadConfigOrThrow<AppConfig>(configPath)
+
+
+    configureAuth(config.auth)
     install(RoleBasedAuthorization)
 
 
+
     // db init
-    DatabaseFactory.init()
+    DatabaseFactory.init(config.database)
 
     // services & routes
     val cvService = CvService()

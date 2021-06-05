@@ -1,5 +1,12 @@
+FROM gradle:latest AS builder
+
+COPY build.gradle.kts .
+COPY src ./src
+
+RUN gradle clean build --no-daemon
+
 FROM openjdk:8-jre-alpine
+COPY --from=builder /home/gradle/build/libs/gradle.jar /app.jar
 
-
-COPY ./build/install/showcase-api/lib/showcase-api.jar /application.jar
-CMD [ "java", "-jar", "-Djava.security.egd=file:/dev/./urandom", "/application.jar" ]
+EXPOSE 8080:8080
+CMD [ "java", "-jar", "/app.jar"]
