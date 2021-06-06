@@ -21,7 +21,7 @@ plugins {
 
 group = "harke.me"
 application {
-    mainClass.set("harke.me.api.MainKt")
+    mainClass.set("harke.me.api.ApplicationKt")
 }
 
 tasks.test {
