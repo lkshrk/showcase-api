@@ -3,7 +3,7 @@ FROM gradle:7.0.2-jdk11 AS builder
 COPY build.gradle.kts .
 COPY src ./src
 
-RUN gradle clean build -q --no-daemon
+RUN gradle clean build  -x test -q --no-daemon
 
 FROM openjdk:11-jre-slim
 COPY --from=builder /home/gradle/build/libs/showcase-api.jar /app.jar
