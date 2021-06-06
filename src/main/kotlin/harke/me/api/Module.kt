@@ -25,9 +25,8 @@ fun Application.module() {
     initDatabase(config.database)
 
     install(DefaultHeaders)
-    //TODO Check if needed
-//    install(XForwardedHeaderSupport)
-//    install(CORS)
+
+    install(XForwardedHeaderSupport)
     install(ContentNegotiation) {
         json(Json{prettyPrint = true})
     }

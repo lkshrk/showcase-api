@@ -8,5 +8,5 @@ RUN gradle clean build  -x test -q --no-daemon
 FROM openjdk:11-jre-slim
 COPY --from=builder /home/gradle/build/libs/showcase-api.jar /app.jar
 
-EXPOSE 8080:8080
+EXPOSE 8000:8000
 CMD [ "java", "-jar", "/app.jar", "-Xopt-in=kotlin.RequiresOptIn"]
