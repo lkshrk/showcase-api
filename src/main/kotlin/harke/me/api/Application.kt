@@ -2,8 +2,7 @@ package harke.me.api
 
 import com.sksamuel.hoplite.ConfigLoader
 import harke.me.api.config.AppConfig
-import harke.me.api.persistence.DatabaseProvider
-import harke.me.api.persistence.DatabaseProviderContract
+import harke.me.api.persistence.repository.RepositoryInjection
 import harke.me.api.service.ServiceInjection
 import io.ktor.application.*
 import io.ktor.server.engine.*
@@ -22,9 +21,9 @@ fun main(args: Array<String>) {
                 modules(
                     module {
                         single { config }
-                        single<DatabaseProviderContract> { DatabaseProvider() }
                     },
-                    ServiceInjection.koinBeans
+                    ServiceInjection.koinBeans,
+                    RepositoryInjection.koinBeans
                 )
             }
             main()

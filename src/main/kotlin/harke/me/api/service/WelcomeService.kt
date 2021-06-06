@@ -1,33 +1,35 @@
 package harke.me.api.service
 
-import harke.me.api.persistence.DatabaseProviderContract
-import harke.me.api.persistence.WelcomeEntity
-import harke.me.api.web.model.WelcomeBody
+import harke.me.api.persistence.repository.WelcomeRepository
+import harke.me.api.model.Welcome
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class WelcomeServiceImpl: WelcomeService, KoinComponent {
 
-    private val dbProvider by inject<DatabaseProviderContract>()
+    private val welcomeRepository by inject<WelcomeRepository>()
 
-    override suspend fun getEntry(principal: String): WelcomeBody = dbProvider.dbQuery {
-        WelcomeEntity[principal].toWelcomeEntry()
+    override suspend fun getEntry(principal: String): Welcome {
+        return welcomeRepository.getEntry(principal)
     }
 
-    override suspend fun addEntry(welcomeEntry: WelcomeBody): WelcomeBody = dbProvider.dbQuery {
-        WelcomeEntity.new(welcomeEntry.id) {
-            this.title = welcomeEntry.title
-            this.coverLetter = welcomeEntry.coverLetter
-        }.toWelcomeEntry()
+    override suspend fun addEntry(welcome: Welcome): Welcome {
+        return welcomeRepository.create(welcome)
     }
 
-    override suspend fun deleteEntry(id: String) = dbProvider.dbQuery {
-        WelcomeEntity[id].delete()
+    override suspend fun updateEntry(id: String, welcome: Welcome): Welcome {
+        if (id != welcome.id) throw IllegalArgumentException()
+        return welcomeRepository.update(welcome)
+    }
+
+    override suspend fun deleteEntry(id: String) {
+        welcomeRepository.delete(id)
     }
 }
 
 interface WelcomeService {
-    suspend fun getEntry(principal: String): WelcomeBody
-    suspend fun addEntry(welcomeEntry: WelcomeBody): WelcomeBody
+    suspend fun getEntry(principal: String): Welcome
+    suspend fun addEntry(welcome: Welcome): Welcome
+    suspend fun updateEntry(id: String, welcome: Welcome): Welcome
     suspend fun deleteEntry(id: String)
 }

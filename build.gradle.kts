@@ -23,6 +23,12 @@ group = "harke.me"
 application {
     mainClass.set("harke.me.api.MainKt")
 }
+
+tasks.test {
+    useJUnitPlatform()
+    testLogging.events("PASSED", "FAILED", "SKIPPED")
+}
+
 tasks.withType<KotlinCompile>().all {
     kotlinOptions.jvmTarget = "11"
 }
@@ -66,4 +72,9 @@ dependencies {
 
     testImplementation("io.ktor:ktor-server-tests:$ktorVersion")
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinVersion")
+    testImplementation("org.assertj:assertj-core:3.11.1")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.7.2")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.2")
+    testImplementation("io.mockk:mockk:1.11.0")
 }

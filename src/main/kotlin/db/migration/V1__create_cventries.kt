@@ -1,7 +1,7 @@
 package db.migration
 
-import harke.me.api.persistence.CvEntries
-import harke.me.api.persistence.WelcomeEntries
+import harke.me.api.persistence.model.CvEntries
+import harke.me.api.persistence.model.WelcomeEntries
 import org.flywaydb.core.api.migration.BaseJavaMigration
 import org.flywaydb.core.api.migration.Context
 import org.jetbrains.exposed.sql.SchemaUtils

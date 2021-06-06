@@ -1,10 +1,10 @@
-package harke.me.api.web.model
+package harke.me.api.model
 
 import kotlinx.serialization.Serializable
 
 
 @Serializable
-data class CvBody(
+data class Cv(
     val id: Int? = null,
     val title: String,
     val content: String,

@@ -1,7 +1,10 @@
 package harke.me.api
 
-import harke.me.api.config.*
-import harke.me.api.persistence.DatabaseProviderContract
+import harke.me.api.config.AppConfig
+import harke.me.api.config.AuthorizationException
+import harke.me.api.config.RoleBasedAuthorization
+import harke.me.api.config.authenticationConfig
+import harke.me.api.persistence.initDatabase
 import harke.me.api.web.cvRouting
 import harke.me.api.web.welcomeRouting
 import io.ktor.application.*
@@ -17,12 +20,14 @@ import org.koin.ktor.ext.inject
 
 fun Application.module() {
 
-    val databaseProvider by inject<DatabaseProviderContract>()
     val config by inject<AppConfig>()
 
-    databaseProvider.init()
+    initDatabase(config.database)
 
     install(DefaultHeaders)
+    //TODO Check if needed
+//    install(XForwardedHeaderSupport)
+//    install(CORS)
     install(ContentNegotiation) {
         json(Json{prettyPrint = true})
     }
@@ -45,9 +50,7 @@ fun Application.module() {
     install(RoleBasedAuthorization)
 
     install(Routing) {
-        authenticate("auth-jwt") {
-            cvRouting()
-            welcomeRouting()
-        }
+        cvRouting()
+        welcomeRouting()
     }
 }

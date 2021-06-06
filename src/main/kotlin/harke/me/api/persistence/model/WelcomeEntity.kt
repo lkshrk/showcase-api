@@ -1,6 +1,6 @@
-package harke.me.api.persistence
+package harke.me.api.persistence.model
 
-import harke.me.api.web.model.WelcomeBody
+import harke.me.api.model.Welcome
 import org.jetbrains.exposed.dao.Entity
 import org.jetbrains.exposed.dao.EntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -21,7 +21,7 @@ class WelcomeEntity(id: EntityID<String>) : Entity<String>(id) {
     var title by WelcomeEntries.title
     var coverLetter by WelcomeEntries.coverLetter
 
-    fun toWelcomeEntry() = WelcomeBody(
+    fun toWelcome() = Welcome(
         id.value,
         title,
         coverLetter

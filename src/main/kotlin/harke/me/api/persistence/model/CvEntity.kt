@@ -1,6 +1,6 @@
-package harke.me.api.persistence
+package harke.me.api.persistence.model
 
-import harke.me.api.web.model.CvBody
+import harke.me.api.model.Cv
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -15,8 +15,8 @@ object CvEntries : IntIdTable("CV") {
     val dateUpdated = long("dateUpdated")
 }
 
-class CvEntryEntity(id: EntityID<Int>) : IntEntity(id) {
-    companion object : IntEntityClass<CvEntryEntity>(CvEntries)
+class CvEntity(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<CvEntity>(CvEntries)
 
     var title by CvEntries.title
     var content by CvEntries.content
@@ -24,7 +24,7 @@ class CvEntryEntity(id: EntityID<Int>) : IntEntity(id) {
     var endYear by CvEntries.endYear
     var dateUpdated by CvEntries.dateUpdated
 
-    fun toCvEntry() = CvBody(
+    fun toCv() = Cv(
         id.value,
         title,
         content,

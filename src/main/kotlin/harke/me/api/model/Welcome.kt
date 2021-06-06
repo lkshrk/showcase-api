@@ -1,9 +1,9 @@
-package harke.me.api.web.model
+package harke.me.api.model
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class WelcomeBody(
+data class Welcome(
     val id: String,
     val title: String,
     val coverLetter: String
