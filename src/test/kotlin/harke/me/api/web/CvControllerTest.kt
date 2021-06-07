@@ -1,8 +1,8 @@
 package harke.me.api.web
 
 import harke.me.api.config.AuthorizationException
-import harke.me.api.service.CvService
 import harke.me.api.model.Cv
+import harke.me.api.service.CvService
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import io.mockk.clearMocks
@@ -12,24 +12,20 @@ import io.mockk.mockk
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.*
 import org.koin.dsl.module
+import kotlin.test.*
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CvControllerTest: ControllerTestBase() {
 
     private val cvService: CvService = mockk()
 
-    @BeforeAll
-    fun setup() {
+    init {
         koinModules = module {
             single(override = true) { cvService }
         }
-
     }
 
-    @BeforeEach
+    @BeforeTest
     fun clearMocks() {
         clearMocks(cvService)
     }
@@ -40,7 +36,7 @@ class CvControllerTest: ControllerTestBase() {
 
         val call = handleRequest(HttpMethod.Get, "/cv")
         with(call) {
-            assertThat(response.status()).isEqualTo(HttpStatusCode.Unauthorized)
+            assertEquals(response.status(), HttpStatusCode.Unauthorized)
         }
     }
 
@@ -56,8 +52,8 @@ class CvControllerTest: ControllerTestBase() {
             val actual = response.content?.let {
                 Json.decodeFromString<List<Cv>>(it)
             }
-            assertThat(response.status()).isEqualTo(HttpStatusCode.OK)
-            assertThat(actual).containsExactlyElementsOf(expected)
+            assertEquals(response.status(), HttpStatusCode.OK)
+            assertContentEquals(actual, expected)
         }
     }
 
@@ -73,8 +69,8 @@ class CvControllerTest: ControllerTestBase() {
             val actual = response.content?.let {
                 Json.decodeFromString<Cv>(it)
             }
-            assertThat(response.status()).isEqualTo(HttpStatusCode.OK)
-            assertThat(actual).isEqualTo(expected)
+            assertEquals(response.status(), HttpStatusCode.OK)
+            assertEquals(actual, expected)
         }
     }
 
@@ -82,7 +78,7 @@ class CvControllerTest: ControllerTestBase() {
     fun `create cv entry without admin role`() = withControllerTestApplication {
 
         val body = Json.encodeToString(createCvBody(null))
-        assertThrows<AuthorizationException> {
+        assertFailsWith<AuthorizationException> {
             handleRequest(HttpMethod.Post, "/cv") {
                 addHeader(HttpHeaders.Authorization, "Bearer "+createTokenWithRole("role"))
                 addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
@@ -109,8 +105,8 @@ class CvControllerTest: ControllerTestBase() {
             val actual = response.content?.let {
                 Json.decodeFromString<Cv>(it)
             }
-            assertThat(response.status()).isEqualTo(HttpStatusCode.Created)
-            assertThat(actual).isEqualTo(expected)
+            assertEquals(response.status(), HttpStatusCode.Created)
+            assertEquals(actual, expected)
         }
     }
 
@@ -131,8 +127,8 @@ class CvControllerTest: ControllerTestBase() {
             val actual = response.content?.let {
                 Json.decodeFromString<Cv>(it)
             }
-            assertThat(response.status()).isEqualTo(HttpStatusCode.OK)
-            assertThat(actual).isEqualTo(request)
+            assertEquals(response.status(), HttpStatusCode.OK)
+            assertEquals(actual, request)
         }
     }
 
@@ -146,7 +142,7 @@ class CvControllerTest: ControllerTestBase() {
             addHeader(HttpHeaders.Authorization, "Bearer "+createTokenWithRole("admin"))
         }
         with(call) {
-            assertThat(response.status()).isEqualTo(HttpStatusCode.OK)
+            assertEquals(response.status(), HttpStatusCode.OK)
         }
     }
 

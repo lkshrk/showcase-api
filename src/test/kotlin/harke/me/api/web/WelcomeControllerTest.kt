@@ -1,8 +1,8 @@
 package harke.me.api.web
 
 import harke.me.api.config.AuthorizationException
-import harke.me.api.service.WelcomeService
 import harke.me.api.model.Welcome
+import harke.me.api.service.WelcomeService
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import io.mockk.clearMocks
@@ -12,24 +12,23 @@ import io.mockk.mockk
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.*
 import org.koin.dsl.module
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class WelcomeControllerTest: ControllerTestBase() {
 
     private val welcomeService: WelcomeService = mockk()
 
-    @BeforeAll
-    fun setup() {
+    init {
         koinModules = module {
             single(override = true) { welcomeService }
         }
-
     }
 
-    @BeforeEach
+    @BeforeTest
     fun clearMocks() {
         clearMocks(welcomeService)
     }
@@ -40,7 +39,7 @@ class WelcomeControllerTest: ControllerTestBase() {
 
         val call = handleRequest(HttpMethod.Get, "/welcome")
         with(call) {
-            assertThat(response.status()).isEqualTo(HttpStatusCode.Unauthorized)
+            assertEquals(response.status(), HttpStatusCode.Unauthorized)
         }
     }
 
@@ -56,8 +55,8 @@ class WelcomeControllerTest: ControllerTestBase() {
             val actual = response.content?.let {
                 Json.decodeFromString<Welcome>(it)
             }
-            assertThat(response.status()).isEqualTo(HttpStatusCode.OK)
-            assertThat(actual).isEqualTo(expected)
+            assertEquals(response.status(), HttpStatusCode.OK)
+            assertEquals(actual, expected)
         }
     }
 
@@ -65,7 +64,7 @@ class WelcomeControllerTest: ControllerTestBase() {
     fun `create welcome entry without admin role`() = withControllerTestApplication {
 
         val body = Json.encodeToString(createWelcomeBody())
-        assertThrows<AuthorizationException> {
+        assertFailsWith<AuthorizationException> {
             handleRequest(HttpMethod.Post, "/welcome") {
                 addHeader(HttpHeaders.Authorization, "Bearer "+createTokenWithRole("role"))
                 addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
@@ -91,8 +90,8 @@ class WelcomeControllerTest: ControllerTestBase() {
             val actual = response.content?.let {
                 Json.decodeFromString<Welcome>(it)
             }
-            assertThat(response.status()).isEqualTo(HttpStatusCode.Created)
-            assertThat(actual).isEqualTo(request)
+            assertEquals(response.status(), HttpStatusCode.Created)
+            assertEquals(actual, request)
         }
     }
 
@@ -113,8 +112,8 @@ class WelcomeControllerTest: ControllerTestBase() {
             val actual = response.content?.let {
                 Json.decodeFromString<Welcome>(it)
             }
-            assertThat(response.status()).isEqualTo(HttpStatusCode.OK)
-            assertThat(actual).isEqualTo(request)
+            assertEquals(response.status(), HttpStatusCode.OK)
+            assertEquals(actual, request)
         }
     }
 
@@ -128,7 +127,7 @@ class WelcomeControllerTest: ControllerTestBase() {
             addHeader(HttpHeaders.Authorization, "Bearer "+createTokenWithRole("admin"))
         }
         with(call) {
-            assertThat(response.status()).isEqualTo(HttpStatusCode.OK)
+            assertEquals(response.status(), HttpStatusCode.OK)
         }
     }
 

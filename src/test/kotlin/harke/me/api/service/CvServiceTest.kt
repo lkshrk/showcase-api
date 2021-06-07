@@ -5,17 +5,12 @@ import harke.me.api.persistence.repository.CvRepository
 import io.mockk.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
-import kotlin.test.assertFailsWith
+import kotlin.test.*
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CvServiceTest {
 
     private val cvRepository: CvRepository = mockk()
@@ -32,7 +27,7 @@ class CvServiceTest {
         }
     }
 
-    @BeforeEach
+    @BeforeTest
     fun before() {
         clearMocks(cvRepository)
     }
@@ -44,7 +39,7 @@ class CvServiceTest {
 
         val actual = cut.getAllEntries()
 
-        assertThat(actual).containsExactly(expected)
+        assertContains(actual, expected)
     }
 
     @Test
@@ -54,7 +49,7 @@ class CvServiceTest {
 
         val actual = cut.getEntry(expected.id!!)
 
-        assertThat(actual).isEqualTo(expected)
+        assertEquals(actual, expected)
     }
 
     @Test
@@ -65,7 +60,7 @@ class CvServiceTest {
 
         val actual = cut.addEntry(request)
 
-        assertThat(actual).isEqualTo(expected)
+        assertEquals(actual, expected)
     }
 
     @Test
@@ -88,7 +83,7 @@ class CvServiceTest {
 
         val actual = cut.updateEntry(request.id!!, request)
 
-        assertThat(actual).isEqualTo(expected)
+        assertEquals(actual, expected)
     }
 
     @Test

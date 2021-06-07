@@ -5,17 +5,15 @@ import harke.me.api.persistence.repository.WelcomeRepository
 import io.mockk.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class WelcomeServiceTest {
 
     private val welcomeRepository: WelcomeRepository = mockk()
@@ -32,7 +30,7 @@ class WelcomeServiceTest {
         }
     }
 
-    @BeforeEach
+    @BeforeTest
     fun before() {
         clearMocks(welcomeRepository)
     }
@@ -44,7 +42,7 @@ class WelcomeServiceTest {
 
         val actual = cut.getEntry(expected.id)
 
-        assertThat(actual).isEqualTo(expected)
+        assertEquals(actual, expected)
     }
 
     @Test
@@ -55,7 +53,7 @@ class WelcomeServiceTest {
 
         val actual = cut.addEntry(request)
 
-        assertThat(actual).isEqualTo(expected)
+        assertEquals(actual, expected)
     }
 
     @Test
@@ -78,7 +76,7 @@ class WelcomeServiceTest {
 
         val actual = cut.updateEntry(request.id, request)
 
-        assertThat(actual).isEqualTo(expected)
+        assertEquals(actual, expected)
     }
 
     @Test

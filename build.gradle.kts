@@ -45,6 +45,14 @@ repositories {
     mavenCentral()
 }
 
+configurations.all {
+    exclude("junit", "junit")
+    exclude("org.jetbrains.kotlin", "kotlin-test-junit")
+}
+kotlin.sourceSets.all {
+    languageSettings.useExperimentalAnnotation("kotlin.RequiresOptIn")
+}
+
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
     implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
@@ -70,10 +78,7 @@ dependencies {
     implementation("org.flywaydb:flyway-core:$flywayVersion")
 
     testImplementation("io.ktor:ktor-server-tests:$ktorVersion")
-    testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
+    testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlinVersion")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinVersion")
-    testImplementation("org.assertj:assertj-core:3.19.0")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.7.2")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.2")
     testImplementation("io.mockk:mockk:1.11.0")
 }
