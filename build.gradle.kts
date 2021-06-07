@@ -37,7 +37,6 @@ tasks.withType<Jar> {
         attributes["Main-Class"] = "harke.me.api.ApplicationKt"
     }
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    archiveClassifier.set("all")
     archiveFileName.set("showcase-api.jar")
     from(configurations.runtimeClasspath.map { config -> config.map { if (it.isDirectory) it else zipTree(it) } })
 }
