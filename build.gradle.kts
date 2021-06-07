@@ -72,7 +72,7 @@ dependencies {
     testImplementation("io.ktor:ktor-server-tests:$ktorVersion")
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinVersion")
-    testImplementation("org.assertj:assertj-core:3.11.1")
+    testImplementation("org.assertj:assertj-core:3.19.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.7.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.2")
     testImplementation("io.mockk:mockk:1.11.0")
