@@ -24,7 +24,7 @@ class WelcomeControllerTest: ControllerTestBase() {
 
     init {
         koinModules = module {
-            single(override = true) { welcomeService }
+            single() { welcomeService }
         }
     }
 

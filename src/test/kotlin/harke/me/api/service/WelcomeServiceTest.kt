@@ -24,7 +24,7 @@ class WelcomeServiceTest {
         startKoin {
             modules(
                 module {
-                    single(override = true) { welcomeRepository }
+                    single() { welcomeRepository }
                 }
             )
         }

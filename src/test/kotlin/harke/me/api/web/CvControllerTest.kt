@@ -21,7 +21,7 @@ class CvControllerTest: ControllerTestBase() {
 
     init {
         koinModules = module {
-            single(override = true) { cvService }
+            single() { cvService }
         }
     }
 
