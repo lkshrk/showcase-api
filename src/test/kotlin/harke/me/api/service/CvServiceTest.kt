@@ -21,7 +21,7 @@ class CvServiceTest {
         startKoin {
             modules(
                 module {
-                    single(override = true) { cvRepository }
+                    single { cvRepository }
                 }
             )
         }
