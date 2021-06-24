@@ -16,7 +16,7 @@ val postgresqlVersion="42.2.22"
 plugins {
     application
     kotlin("jvm") version "1.5.10"
-    kotlin("plugin.serialization") version "1.5.10"
+    kotlin("plugin.serialization") version "1.5.20"
 }
 
 group = "harke.me"
