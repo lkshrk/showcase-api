@@ -4,7 +4,7 @@ val exposedVersion="0.32.1"
 val flywayVersion="7.10.0"
 val h2Version = "1.4.200"
 val hikariCpVersion="4.0.3"
-val hopliteVersion="1.4.1"
+val hopliteVersion="1.4.3"
 val koinVersion="3.1.0"
 val ktorFlywayVersion="1.2.2"
 val ktorVersion="1.6.0"
@@ -80,5 +80,5 @@ dependencies {
     testImplementation("io.ktor:ktor-server-tests:$ktorVersion")
     testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlinVersion")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinVersion")
-    testImplementation("io.mockk:mockk:1.11.0")
+    testImplementation("io.mockk:mockk:1.12.0")
 }
