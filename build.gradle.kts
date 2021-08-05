@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val exposedVersion="0.32.1"
-val flywayVersion="7.10.0"
+val flywayVersion="7.12.1"
 val h2Version = "1.4.200"
 val hikariCpVersion="5.0.0"
 val hopliteVersion="1.4.3"
