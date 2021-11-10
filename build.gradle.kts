@@ -15,7 +15,7 @@ val postgresqlVersion="42.2.24"
 
 plugins {
     application
-    kotlin("jvm") version "1.5.30"
+    kotlin("jvm") version "1.5.31"
     kotlin("plugin.serialization") version "1.5.31"
 }
 
