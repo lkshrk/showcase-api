@@ -4,7 +4,7 @@ val exposedVersion="0.37.3"
 val flywayVersion="8.3.0"
 val h2Version = "1.4.200"
 val hikariCpVersion="5.0.0"
-val hopliteVersion="1.4.15"
+val hopliteVersion="1.4.16"
 val koinVersion="3.1.3"
 val ktorFlywayVersion="1.2.2"
 val ktorVersion="1.6.6"
@@ -16,7 +16,7 @@ val postgresqlVersion="42.3.1"
 plugins {
     application
     kotlin("jvm") version "1.5.31"
-    kotlin("plugin.serialization") version "1.5.31"
+    kotlin("plugin.serialization") version "1.6.10"
 }
 
 group = "harke.me"
