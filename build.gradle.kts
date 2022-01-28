@@ -9,7 +9,7 @@ val koinVersion="3.1.3"
 val ktorFlywayVersion="1.2.2"
 val ktorVersion="1.6.6"
 val kotlinVersion="1.5.0"
-val logbackVersion="1.2.6"
+val logbackVersion="1.2.10"
 val postgresqlVersion="42.3.1"
 
 
