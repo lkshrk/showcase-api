@@ -10,7 +10,7 @@ jobs:
         run: ./gradlew test --no-daemon
       - name: Build
         run: ./gradlew build -x test --no-daemon
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3.0.1
         with:
           path: |
             ~/.gradle/caches
