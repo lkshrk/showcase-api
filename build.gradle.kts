@@ -10,7 +10,7 @@ val ktorFlywayVersion="1.2.2"
 val ktorVersion="1.6.7"
 val kotlinVersion="1.5.0"
 val logbackVersion="1.2.11"
-val postgresqlVersion="42.3.6"
+val postgresqlVersion="42.5.0"
 
 
 plugins {
