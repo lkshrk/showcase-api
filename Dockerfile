@@ -1,4 +1,4 @@
-FROM gradle:7.0.2-jdk11 AS builder
+FROM gradle:8.3.0-jdk11 AS builder
 
 COPY build.gradle.kts .
 COPY src ./src
